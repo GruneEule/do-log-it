@@ -2,31 +2,32 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>do-log-it – View Log</title>
-    <link rel="stylesheet" href="/static/assets/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>do-log-it – Log Ansicht</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background: #f0f0f0; }
-        .container { max-width: 800px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; }
-        textarea { width: 100%; height: 400px; margin-top: 10px; resize: vertical; }
-        button { margin: 5px 5px 5px 0; padding: 10px 15px; cursor: pointer; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { background: #fff; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { font-size: 1.5em; margin-bottom: 10px; }
+        pre { background: #eee; padding: 10px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
+        button { margin-top: 10px; margin-right: 5px; padding: 5px 10px; border: none; border-radius: 4px; background: #4CAF50; color: white; cursor: pointer; }
+        button:hover { background: #45a049; }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>do-log-it – Log Ansicht</h1>
-    <p>ID: <strong>{{code}}</strong></p>
-    <textarea id="logText" readonly>{{CONTENT}}</textarea>
-    <div>
-        <button onclick="copyText()">Copy Text</button>
-        <button onclick="copyLink()">Copy Link</button>
-    </div>
+    <p>ID: {{CODE}}</p>
+    <pre id="logContent">{{CONTENT}}</pre>
+    <button onclick="copyText()">Copy Text</button>
+    <button onclick="copyLink()">Copy Link</button>
 </div>
 
 <script>
     function copyText() {
-        const text = document.getElementById('logText').value;
+        const text = document.getElementById("logContent").innerText;
         navigator.clipboard.writeText(text).then(() => alert("Text kopiert!"));
     }
+
     function copyLink() {
         const link = window.location.href;
         navigator.clipboard.writeText(link).then(() => alert("Link kopiert!"));
