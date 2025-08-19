@@ -1,64 +1,66 @@
 import os
-import random
-import string
-from urllib.parse import parse_qs
+from wsgiref.simple_server import make_server
 
 # Ordner für gespeicherte Logs
-STORAGE_DIR = "storage"
-os.makedirs(STORAGE_DIR, exist_ok=True)
+STORAGE = "storage"
+if not os.path.exists(STORAGE):
+    os.makedirs(STORAGE)
 
-def generate_id(length=6):
-    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
+# Template für die Ansicht im Browser
+VIEW_TEMPLATE = "static-view/view.html"
+
+def render_template(template_path, context):
+    """Lädt HTML-Template und ersetzt Platzhalter {{key}} mit context[key]."""
+    with open(template_path, "r", encoding="utf-8") as f:
+        html = f.read()
+    for key, value in context.items():
+        html = html.replace(f"{{{{{key}}}}}", value)
+    return html
 
 def application(environ, start_response):
-    path = environ.get('PATH_INFO', '/')
-    method = environ.get('REQUEST_METHOD', 'GET')
+    path = environ.get("PATH_INFO", "/")
 
-    if path.startswith("/api/share") and method == 'POST':
+    # API: Text teilen
+    if path.startswith("/api/share"):
         try:
-            size = int(environ.get('CONTENT_LENGTH', 0))
-        except (ValueError):
+            size = int(environ.get("CONTENT_LENGTH", 0))
+        except (ValueError, TypeError):
             size = 0
-        body = environ['wsgi.input'].read(size).decode('utf-8')
-        data = parse_qs(body)
-        code_text = data.get('code', [''])[0]
+        body = environ["wsgi.input"].read(size).decode("utf-8").strip()
+        if not body:
+            start_response("400 Bad Request", [("Content-Type", "text/plain")])
+            return [b"Kein Text übermittelt"]
 
-        if not code_text.strip():
-            status = '400 Bad Request'
-            headers = [('Content-type', 'text/plain; charset=utf-8')]
-            start_response(status, headers)
-            return [b'No code provided']
+        # Zufälliger 6-stelliger Hex-Code
+        code = os.urandom(3).hex()
+        with open(os.path.join(STORAGE, f"{code}.txt"), "w", encoding="utf-8") as f:
+            f.write(body)
 
-        log_id = generate_id()
-        file_path = os.path.join(STORAGE_DIR, f"{log_id}.txt")
-        with open(file_path, 'w', encoding='utf-8') as f:
-            f.write(code_text)
+        start_response("200 OK", [("Content-Type", "text/plain")])
+        return [code.encode("utf-8")]
 
-        status = '200 OK'
-        headers = [('Content-type', 'text/plain; charset=utf-8')]
-        start_response(status, headers)
-        return [f"/view/{log_id}".encode('utf-8')]
-
+    # View: Text anzeigen
     elif path.startswith("/view/"):
-        log_id = path.split("/")[-1]
-        file_path = os.path.join(STORAGE_DIR, f"{log_id}.txt")
-        if not os.path.isfile(file_path):
-            status = '404 Not Found'
-            headers = [('Content-type', 'text/plain; charset=utf-8')]
-            start_response(status, headers)
-            return [b'Log not found']
+        code = path.split("/view/")[1]
+        filepath = os.path.join(STORAGE, f"{code}.txt")
+        if os.path.isfile(filepath):
+            with open(filepath, "r", encoding="utf-8") as f:
+                content = f.read()
+            html = render_template(VIEW_TEMPLATE, {"code": code, "content": content})
+            start_response("200 OK", [("Content-Type", "text/html")])
+            return [html.encode("utf-8")]
+        else:
+            start_response("404 Not Found", [("Content-Type", "text/plain")])
+            return [b"Not Found"]
 
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
+    # Sonstige Pfade
+    else:
+        start_response("404 Not Found", [("Content-Type", "text/plain")])
+        return [b"Not Found"]
 
-        status = '200 OK'
-        headers = [('Content-type', 'text/plain; charset=utf-8')]
-        start_response(status, headers)
-        return [content.encode('utf-8')]
-
-    else:  # Index
-        status = '200 OK'
-        headers = [('Content-type', 'text/html; charset=utf-8')]
-        start_response(status, headers)
-        with open('static/index.html', 'rb') as f:
-            return [f.read()]
+# Optional: lokal testen
+if __name__ == "__main__":
+    port = 8000
+    print(f"Running on http://localhost:{port}")
+    with make_server("", port, application) as httpd:
+        httpd.serve_forever()
