@@ -48,9 +48,8 @@ def application(environ, start_response):
             with open(filename, "r", encoding="utf-8") as f:
                 content = f.read()
         else:
-            # Für nicht existierende Codes, lass NGINX 404 handeln
-            start_response("404 Not Found", [("Content-Type", "text/plain; charset=utf-8")])
-            return ["404 Not Found".encode("utf-8")]
+            # Für nicht existierende Codes, einfach leeren Inhalt zurückgeben
+            content = ""
 
         html_path = os.path.join(VIEW_DIR, "view.html")
         if os.path.exists(html_path):
@@ -72,6 +71,6 @@ def application(environ, start_response):
         start_response("200 OK", [("Content-Type", "text/html; charset=utf-8")])
         return [html.encode("utf-8")]
 
-    # --- Für alle anderen Pfade, lass NGINX 404 handeln ---
-    start_response("404 Not Found", [("Content-Type", "text/plain; charset=utf-8")])
-    return ["404 Not Found".encode("utf-8")]
+    # --- Für alle anderen Pfade, leere Antwort zurückgeben ---
+    start_response("200 OK", [("Content-Type", "text/plain; charset=utf-8")])
+    return ["".encode("utf-8")]
