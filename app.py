@@ -16,6 +16,16 @@ def application(environ, start_response):
     path = environ.get("PATH_INFO", "")
     method = environ.get("REQUEST_METHOD", "GET")
 
+    # Domain aus den Umgebungsvariablen ermitteln
+    http_host = environ.get('HTTP_HOST', 'localhost')
+    server_name = environ.get('SERVER_NAME', 'localhost')
+    server_port = environ.get('SERVER_PORT', '80')
+
+    # Vollständige Domain-URL erstellen
+    domain = f"http://{http_host or server_name}"
+    if server_port not in ['80', '443']:
+        domain += f":{server_port}"
+
     # --- API: Text hochladen ---
     if path == "/api/share" and method == "POST":
         try:
@@ -37,8 +47,10 @@ def application(environ, start_response):
         with open(filename, "w", encoding="utf-8") as f:
             f.write(body)
 
+        # Vollständige URL zurückgeben
+        full_url = f"{domain}/{code}"
         start_response("200 OK", [("Content-Type", "text/plain; charset=utf-8")])
-        return [f"/{code}".encode("utf-8")]  # Nur noch /{code} ohne /view/
+        return [full_url.encode("utf-8")]
 
     # --- Direkter Zugriff auf Code im Root-Path ---
     if path != "/" and len(path) > 1:  # Alles außer root path
@@ -61,7 +73,6 @@ def application(environ, start_response):
                 return [content.encode("utf-8")]
         else:
             # Für nicht existierende Codes - NGINX wird 404 handeln
-            # Leere Response mit 404 Status
             start_response("404 Not Found", [("Content-Type", "text/plain; charset=utf-8")])
             return ["".encode("utf-8")]
 
