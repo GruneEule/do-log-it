@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>do-log-it</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+<h1>do-log-it</h1>
+<form id="pasteForm">
+    <textarea name="content" rows="10" cols="80"></textarea><br>
+    <button type="submit">Share</button>
+</form>
+<p id="result"></p>
+
+<script>
+    document.getElementById("pasteForm").onsubmit = async (e) => {
+        e.preventDefault();
+        const content = e.target.content.value;
+        const res = await fetch("/api/save", {
+            method: "POST",
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body: "content=" + encodeURIComponent(content)
+        });
+        const data = await res.json();
+        document.getElementById("result").innerText =
+            "Dein Link: " + window.location.origin + "/api/get/" + data.id;
+    };
+</script>
+</body>
+</html>
