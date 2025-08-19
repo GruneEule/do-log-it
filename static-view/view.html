@@ -2,15 +2,12 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>do-log-it – Log Ansicht</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
-        .container { background: #fff; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { font-size: 1.5em; margin-bottom: 10px; }
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
         pre { background: #eee; padding: 10px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
-        button { margin-top: 10px; margin-right: 5px; padding: 5px 10px; border: none; border-radius: 4px; background: #4CAF50; color: white; cursor: pointer; }
-        button:hover { background: #45a049; }
+        button { margin-right: 10px; padding: 5px 10px; }
     </style>
 </head>
 <body>
@@ -24,13 +21,13 @@
 
 <script>
     function copyText() {
-        const text = document.getElementById("logContent").innerText;
-        navigator.clipboard.writeText(text).then(() => alert("Text kopiert!"));
+        navigator.clipboard.writeText(document.getElementById('logContent').textContent);
+        alert("Text kopiert!");
     }
 
     function copyLink() {
-        const link = window.location.href;
-        navigator.clipboard.writeText(link).then(() => alert("Link kopiert!"));
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link kopiert!");
     }
 </script>
 </body>
