@@ -38,33 +38,36 @@ def application(environ, start_response):
             f.write(body)
 
         start_response("200 OK", [("Content-Type", "text/plain; charset=utf-8")])
-        return [f"/view/{code}".encode("utf-8")]
+        return [f"/{code}".encode("utf-8")]  # Geändert: Nur noch /{code}
 
-    # --- GUI /view/{code} ---
-    if path.startswith("/view/"):
-        code = unquote(path[len("/view/"):])
+    # --- Direkter Zugriff auf Code im Root-Path ---
+    if path != "/" and len(path) > 1:  # Alles außer root path
+        code = unquote(path[1:])  # Entferne das führende "/"
         filename = os.path.join(STORAGE_DIR, f"{code}.txt")
+
         if os.path.exists(filename):
             with open(filename, "r", encoding="utf-8") as f:
                 content = f.read()
-        else:
-            # Für nicht existierende Codes - NGINX wird 404 handeln
-            start_response("404 Not Found", [("Content-Type", "text/plain; charset=utf-8")])
-            return ["".encode("utf-8")]
 
-        html_path = os.path.join(VIEW_DIR, "view.html")
-        if os.path.exists(html_path):
-            with open(html_path, "r", encoding="utf-8") as f:
-                template = f.read()
-            # Korrekte Zuordnung der Platzhalter
-            html = template.replace("{{CONTENT}}", content).replace("{{CODE}}", code)
+            html_path = os.path.join(VIEW_DIR, "view.html")
+            if os.path.exists(html_path):
+                with open(html_path, "r", encoding="utf-8") as f:
+                    template = f.read()
+                html = template.replace("{{CONTENT}}", content).replace("{{CODE}}", code)
+                start_response("200 OK", [("Content-Type", "text/html; charset=utf-8")])
+                return [html.encode("utf-8")]
+            else:
+                start_response("200 OK", [("Content-Type", "text/plain; charset=utf-8")])
+                return [content.encode("utf-8")]
+        else:
+            # Für nicht existierende Codes: Weiterleitung zur Hauptseite
+            index_file = os.path.join("./static", "index.html")
+            with open(index_file, "r", encoding="utf-8") as f:
+                html = f.read()
             start_response("200 OK", [("Content-Type", "text/html; charset=utf-8")])
             return [html.encode("utf-8")]
-        else:
-            start_response("200 OK", [("Content-Type", "text/plain; charset=utf-8")])
-            return [content.encode("utf-8")]
 
-    # --- Root ---
+    # --- Root: Hauptseite ---
     index_file = os.path.join("./static", "index.html")
     if os.path.exists(index_file):
         with open(index_file, "r", encoding="utf-8") as f:
@@ -72,6 +75,9 @@ def application(environ, start_response):
         start_response("200 OK", [("Content-Type", "text/html; charset=utf-8")])
         return [html.encode("utf-8")]
 
-    # --- Für alle anderen Pfade - NGINX wird 404 handeln ---
-    start_response("404 Not Found", [("Content-Type", "text/plain; charset=utf-8")])
-    return ["".encode("utf-8")]
+    # --- Fallback: Immer index.html zurückgeben ---
+    index_file = os.path.join("./static", "index.html")
+    with open(index_file, "r", encoding="utf-8") as f:
+        html = f.read()
+    start_response("200 OK", [("Content-Type", "text/html; charset=utf-8")])
+    return [html.encode("utf-8")]
