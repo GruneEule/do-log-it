@@ -2,22 +2,114 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>do-log-it – Log Ansicht</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
-        .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        pre { background: #eee; padding: 10px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
-        button { margin-right: 10px; padding: 5px 10px; }
-    </style>
+    <link rel="stylesheet" href="https://do-log-it.grueneeule.de/assets/css/main.css">
 </head>
 <body>
-<div class="container">
-    <h1>do-log-it – Log Ansicht</h1>
-    <p>ID: {{CODE}}</p>
-    <pre id="logContent">{{CONTENT}}</pre>
-    <button onclick="copyText()">Copy Text</button>
-    <button onclick="copyLink()">Copy Link</button>
-</div>
+<div class="bg-animation"></div>
+
+<header>
+    <nav>
+        <a href="/" class="logo">
+            <img src="/assets/img/owlinx.png" alt="GrüneEule Logo" class="logo-img">
+            do-log-it
+        </a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="https://grueneeule.de">GrüneEule</a></li>
+            <li><a href="https://github.com/GruneEule/owlink">GitHub</a></li>
+            <li><a href="https://grueneeule.de/l/dc" target="_blank" rel="noopener noreferrer">Discord Server</a></li>
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <div class="log-container">
+        <div class="logo-container">
+            <img src="/assets/img/owlinx.png" alt="do-log-it Logo" class="form-logo">
+            <h1>do-log-it</h1>
+        </div>
+
+        <h2>Log Ansicht</h2>
+        <p class="log-id">ID: {{CODE}}</p>
+
+        <div class="log-content" id="logContent">{{CONTENT}}</div>
+
+        <div class="log-actions">
+            <button onclick="copyText()">Text kopieren</button>
+            <button onclick="copyLink()">Link kopieren</button>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>GrüneEule</h4>
+                <p><a href="https://grueneeule.de/l/github">GitHub</a></p>
+                <p><a href="https://status.grueneeule.de">Status</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Navigation</h4>
+                <p><a href="/">Home</a></p>
+                <p><a href="https://grueneeule.de">GrüneEule</a></p>
+                <p><a href="https://github.com/GruneEule/owlink">GitHub Repo</a></p>
+                <p><a href="https://grueneeule.de/l/dc">Discord Server</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Kontakt</h4>
+                <p><a href="https://grueneeule.de/l/dc" target="_blank" rel="noopener noreferrer">Discord-Server beitreten</a></p>
+                <p><a href="mailto:hello@grueneeule.de">hello@grueneeule.de</a></p>
+            </div>
+            <div class="footer-section">
+                <h4>Rechtliches</h4>
+                <p><a href="https://grueneeule.de/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a></p>
+                <p><a href="https://grueneeule.de/legal/agb" target="_blank" rel="noopener noreferrer">AGB</a></p>
+            </div>
+            <div class="footer-section" style="max-width: 180px;">
+                <h4>Nachhaltigkeit</h4>
+                <a href="https://www.netcup.com" target="_blank" rel="noopener noreferrer">
+                    <img src="https://www.netcup.com/uploads/netcup_oekostrom_c6af08e7b5.png"
+                         alt="netcup Ökostrom"
+                         style="width: 80px; height: auto; margin-top: 5px;">
+                </a>
+            </div>
+        </div>
+        <div class="footer-banner footer-bottom" style="
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                margin: 20px 0;
+                flex-wrap: wrap;
+            ">
+            <div style="text-align: center; display: flex; align-items: center; gap: 10px;">
+                <p>Domain by</p>
+                <a href="https://www.netcup.com" target="_blank" rel="noopener noreferrer">
+                    <img src="https://www.netcup.com/uploads/Netcup_logo_RGB_color_vorschau_fe8ecdc428.png" width="150" height="43" alt="netcup" />
+                </a>
+            </div>
+            <div style="text-align: center; display: flex; align-items: center; gap: 10px;">
+                <p>Hosted by</p>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <a href="https://index-hosting.com" target="_blank" rel="noopener noreferrer">
+                        <img src="https://index-hosting.com/templates/lagom2/assets/img/logo/logo_big_inverse.392541094.svg" width="170" height="65" alt="Index-Hosting" />
+                    </a>
+                    <span>with</span>
+                    <a href="https://nginx.org" target="_blank" rel="noopener noreferrer">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Nginx_logo.svg" width="100" alt="NGINX" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Developed with 🦉 by JumpStone.</p>
+            <p>&copy; 2025 GrüneEule. Veröffentlicht unter AGPL-3.0.</p>
+        </div>
+    </div>
+</footer>
 
 <script>
     function copyText() {
