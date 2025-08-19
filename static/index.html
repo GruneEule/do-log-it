@@ -31,7 +31,7 @@
 
         if(res.ok) {
             const link = await res.text();
-            document.getElementById('result').innerHTML = `Dein Link: <a href="${link}" target="_blank">${link}</a>`;
+            document.getElementById('result').innerHTML = `Dein Link: <a href="https://do-log-it.grueneeule.de${link}" target="_blank">${link}</a>`;
         } else {
             const err = await res.text();
             document.getElementById('result').textContent = `Fehler: ${err}`;
