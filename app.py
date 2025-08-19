@@ -44,12 +44,13 @@ def application(environ, start_response):
             with open(filename, "r", encoding="utf-8") as f:
                 content = f.read()
         else:
-            content = ""
+            content = "Datei nicht gefunden"
 
         html_path = os.path.join(VIEW_DIR, "view.html")
         if os.path.exists(html_path):
             with open(html_path, "r", encoding="utf-8") as f:
                 template = f.read()
+            # Korrekte Zuordnung der Platzhalter
             html = template.replace("{{CONTENT}}", content).replace("{{CODE}}", code)
             start_response("200 OK", [("Content-Type", "text/html; charset=utf-8")])
             return [html.encode("utf-8")]
@@ -66,5 +67,5 @@ def application(environ, start_response):
         return [html.encode("utf-8")]
 
     # --- Default ---
-    start_response("200 OK", [("Content-Type", "text/plain; charset=utf-8")])
-    return ["".encode("utf-8")]
+    start_response("404 Not Found", [("Content-Type", "text/plain; charset=utf-8")])
+    return ["404 Not Found".encode("utf-8")]
