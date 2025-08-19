@@ -1,5 +1,3 @@
-[file name]: app.py
-[file content begin]
 import os
 import random
 import string
@@ -77,4 +75,3 @@ def application(environ, start_response):
     # --- Für alle anderen Pfade, lass NGINX 404 handeln ---
     start_response("404 Not Found", [("Content-Type", "text/plain; charset=utf-8")])
     return ["404 Not Found".encode("utf-8")]
-[file content end]
