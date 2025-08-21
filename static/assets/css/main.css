@@ -206,8 +206,8 @@ main {
 
 /* Shortener Container */
 .shortener-container {
-    max-width: 600px;
-    margin: 极 auto;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 3rem 2rem;
     background: var(--bg-card);
     border-radius: 20px;
@@ -281,7 +281,7 @@ input[type="url"], input[type="text"], textarea {
     background: var(--bg-secondary);
     color: var(--text-primary);
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all 极.3s ease;
     font-family: monospace;
 }
 
@@ -305,7 +305,7 @@ button {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: var(--shadow-glow);
+    box-shadow: var(--极-glow);
     margin-top: 1rem;
 }
 
@@ -348,7 +348,7 @@ button:hover {
 }
 
 #result a:hover {
-    background: rgba(244, 124, 32, 0.2);
+    background: rgba(244, 124, 32, 极.2);
 }
 
 @keyframes slideIn {
@@ -461,7 +461,7 @@ footer {
 }
 
 .tab-button {
-    padding: 极 24px;
+    padding: 12px 24px;
     background: var(--bg-secondary);
     border: none;
     border-radius: 8px 8px 0 0;
@@ -473,7 +473,7 @@ footer {
 }
 
 .tab-button:hover {
-    background: var(--极);
+    background: var(--bg-card);
     color: var(--text-primary);
 }
 
@@ -593,7 +593,7 @@ footer {
     font-family: monospace;
     white-space: pre-wrap;
     word-break: break-word;
-    极: 60vh;
+    max-height: 60vh;
     overflow-y: auto;
 }
 
@@ -617,33 +617,162 @@ footer {
     margin-bottom: 1rem;
 }
 
+/* Verbesserte Code-Eingabefelder */
+.code-editor-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.code-editor-header {
+    background: var(--main-dark);
+    color: white;
+    padding: 8px 15px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.code-editor-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.code-editor-actions button {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+    margin: 0;
+}
+
+.code-editor-actions button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
 .code-input {
-    width: 800px;
-    min-height: 300px;  /* Größere Höhe */
-    font-family: monospace; /* Monospace-Schriftart für Code */
-    white-space: pre;   /* Behält Leerzeichen und Zeilenumbrüche bei */
-    overflow-x: auto;  /* Horizontales Scrollen bei langen Zeilen */
-    word-wrap: normal;  /* Verhindert ungewollte Zeilenumbrüche */
-    resize: both;   /* Ermöglicht dem Benutzer, die Höhe und Breite anzupassen */
+    width: 100%;
+    min-height: 300px;
+    font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+    white-space: pre;
+    overflow-x: auto;
+    word-wrap: normal;
+    resize: vertical;
     line-height: 1.5;
     padding: 15px;
     font-size: 14px;
-    tab-size: 4;        /* Tab-Größe für bessere Code-Darstellung */
-    max-width: 100%;    /* Stellt sicher, dass es nicht über den Container hinausgeht */
-    box-sizing: border-box; /* Bezieht Padding in die Breitenberechnung ein */
+    tab-size: 4;
+    box-sizing: border-box;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 0 0 10px 10px;
 }
 
-/* Optional: Styling für die Scrollbar */
+/* Syntax-Highlighting für häufige Code-Elemente */
+.code-input {
+    /* Schlüsselwörter */
+    background-image:
+            linear-gradient(rgba(244, 124, 32, 0.1), rgba(244, 124, 32, 0.1)),
+            linear-gradient(rgba(248, 177, 51, 0.1), rgba(248, 177, 51, 0.1));
+    background-size: 0 0;
+    background-repeat: no-repeat;
+}
+
+/* Line Numbers (optional) */
+.code-input {
+    background-attachment: local;
+    background-image:
+            linear-gradient(var(--bg-secondary), var(--bg-secondary)),
+            linear-gradient(var(--bg-secondary), var(--bg-secondary)),
+            linear-gradient(to right, rgba(128, 128, 128, 0.1) 1px, transparent 1px);
+    background-size:
+            100% 1.5em,
+            100% 1.5em,
+            auto 1.5em;
+    background-position:
+            0 0,
+            0 0,
+            40px 0;
+    padding-left: 50px;
+    line-height: 1.5em;
+}
+
+/* Scrollbar Styling */
 .code-input::-webkit-scrollbar {
-    height: 12px;
     width: 12px;
+    height: 12px;
+}
+
+.code-input::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+    border-radius: 0 0 10px 0;
 }
 
 .code-input::-webkit-scrollbar-thumb {
-    background: #888;
+    background: var(--main-dark);
     border-radius: 6px;
+    border: 3px solid var(--bg-primary);
 }
 
 .code-input::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    background: var(--main-color);
+}
+
+.code-input::-webkit-scrollbar-corner {
+    background: var(--bg-primary);
+}
+
+/* Responsive Anpassungen für Code-Editor */
+@media (max-width: 768px) {
+    .code-input {
+        min-height: 200px;
+        font-size: 13px;
+        padding-left: 45px;
+    }
+
+    .code-editor-header {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    .code-editor-actions {
+        align-self: flex-end;
+    }
+}
+
+/* Toggle für Vollbildmodus */
+.code-input.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    border-radius: 0;
+    resize: none;
+}
+
+/* Zusätzliche Hilfsklassen für bessere Code-Darstellung */
+.code-language-selector {
+    margin-bottom: 10px;
+}
+
+.code-language-selector select {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-family: monospace;
 }
