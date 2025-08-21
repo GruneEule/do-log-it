@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>do-log-it - by GrüneEule</title>
-    <link rel="icon" href="assets/img/owlinx.png" type="image/png">
+    <title>do-log-it – Log Ansicht</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/GruneEule/do-log-it@main/static/assets/css/main.css">
 </head>
 <body>
@@ -19,28 +18,31 @@
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
             <li><a href="https://grueneeule.de">GrüneEule</a></li>
-            <li><a href="https://github.com/GruneEule/do-log-it">GitHub</a></li>
+            <li><a href="https://github.com/GruneEule/owlink">GitHub</a></li>
             <li><a href="https://grueneeule.de/l/dc" target="_blank" rel="noopener noreferrer">Discord Server</a></li>
         </ul>
     </nav>
 </header>
 
 <main>
-    <div class="shortener-container">
+    <div class="log-container">
         <div class="logo-container">
             <img src="/assets/img/owlinx.png" alt="do-log-it Logo" class="form-logo">
-            <h1>Do Log it</h1>
+            <h1>do-log-it</h1>
         </div>
 
-        <div class="special-message">
-            <h2>ℹ️ Dieser Log wurde nicht gefunden!</h2>
-            <div class="requested-url" id="requestedUrl"></div>
-            <p>Erstelle einen neuen Log und teile ihn mit anderen!</p>
-            <a href="/" class="claim-button" id="claimButton">LOG ERSTELLEN</a>
+        <h2>Log Ansicht</h2>
+        <p class="log-id">ID: {{CODE}}</p>
+
+        <div class="log-content" id="logContent">{{CONTENT}}</div>
+
+        <div class="log-actions">
+            <button onclick="copyText()">Text kopieren</button>
+            <button onclick="copyLink()">Link kopieren</button>
+            <button onclick="viewRaw()">Raw</button>
         </div>
     </div>
 </main>
-
 
 <footer>
     <div class="container">
@@ -52,9 +54,9 @@
             </div>
             <div class="footer-section">
                 <h4>Navigation</h4>
-                <p><a href="/index.html">Home</a></p>
+                <p><a href="/">Home</a></p>
                 <p><a href="https://grueneeule.de">GrüneEule</a></p>
-                <p><a href="https://grueneeule.de">GitHub Repo</a></p>
+                <p><a href="https://github.com/GruneEule/owlink">GitHub Repo</a></p>
                 <p><a href="https://grueneeule.de/l/dc">Discord Server</a></p>
             </div>
             <div class="footer-section">
@@ -110,25 +112,22 @@
     </div>
 </footer>
 
-
 <script>
-    // Holen der aktuellen URL
-    const currentUrl = window.location.pathname;
-    const requestedUrlElement = document.getElementById('requestedUrl');
-    const claimButton = document.getElementById('claimButton');
+    function copyText() {
+        navigator.clipboard.writeText(document.getElementById('logContent').textContent);
+        alert("Text kopiert!");
+    }
 
-    // Anzeigen der aufgerufenen URL
-    requestedUrlElement.textContent = window.location.origin + currentUrl;
+    function copyLink() {
+        navigator.clipboard.writeText(window.location.href);
+        alert("Link kopiert!");
+    }
 
-    // Setzen des Links für den Claim-Button
-    claimButton.href = `/?desired=${currentUrl.substring(1)}`;
-
-    // Optional: Scrollen zur Nachricht, wenn eine spezifische URL aufgerufen wurde
-    if(currentUrl !== '/') {
-        window.scrollTo({
-            top: document.querySelector('.special-message').offsetTop - 100,
-            behavior: 'smooth'
-        });
+    function viewRaw() {
+        // Aktuelle URL abrufen und /raw/ einfügen
+        const currentUrl = window.location.href;
+        const rawUrl = currentUrl.replace('/{{CODE}}', '/raw/{{CODE}}');
+        window.open(rawUrl, '_blank');
     }
 </script>
 </body>

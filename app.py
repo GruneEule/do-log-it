@@ -52,6 +52,23 @@ def application(environ, start_response):
         start_response("200 OK", [("Content-Type", "text/plain; charset=utf-8")])
         return [full_url.encode("utf-8")]
 
+    # --- Raw-Text Ansicht für Codes ---
+    if path.startswith("/raw/") and len(path) > 5:  # "/raw/" + mindestens 1 Zeichen
+        code = unquote(path[5:])  # Entferne das führende "/raw/"
+        filename = os.path.join(STORAGE_DIR, f"{code}.txt")
+
+        if os.path.exists(filename):
+            with open(filename, "r", encoding="utf-8") as f:
+                content = f.read()
+            start_response("200 OK", [
+                ("Content-Type", "text/plain; charset=utf-8"),
+                ("Access-Control-Allow-Origin", "*")
+            ])
+            return [content.encode("utf-8")]
+        else:
+            start_response("404 Not Found", [("Content-Type", "text/plain; charset=utf-8")])
+            return ["Not Found".encode("utf-8")]
+
     # --- Direkter Zugriff auf Code im Root-Path ---
     if path != "/" and len(path) > 1:  # Alles außer root path
         code = unquote(path[1:])  # Entferne das führende "/"
