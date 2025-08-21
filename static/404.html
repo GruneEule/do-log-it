@@ -14,7 +14,7 @@
     <nav>
         <a href="/" class="logo">
             <img src="https://cdn.jsdelivr.net/gh/GruneEule/do-log-it@main/static/assets/img/dlg.png" alt="GrüneEule Logo" class="logo-img">
-            do-log-it
+            Do Log it
         </a>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
@@ -26,21 +26,17 @@
 </header>
 
 <main>
-    <div class="log-container">
+    <div class="shortener-container">
         <div class="logo-container">
             <img src="https://cdn.jsdelivr.net/gh/GruneEule/do-log-it@main/static/assets/img/dlg.png" alt="do-log-it Logo" class="form-logo">
-            <h1>do-log-it</h1>
+            <h1>Do Log it</h1>
         </div>
 
-        <h2>Log Ansicht</h2>
-        <p class="log-id">ID: {{CODE}}</p>
-
-        <div class="log-content" id="logContent">{{CONTENT}}</div>
-
-        <div class="log-actions">
-            <button onclick="copyText()">Text kopieren</button>
-            <button onclick="copyLink()">Link kopieren</button>
-            <button onclick="viewRaw()">Raw</button>
+        <div class="special-message">
+            <h2>ℹ️ Dieser Log wurde nicht gefunden!</h2>
+            <div class="requested-url" id="requestedUrl"></div>
+            <p>Erstelle einen neuen Log und teile ihn mit anderen!</p>
+            <a href="/" class="claim-button" id="claimButton">LOG ERSTELLEN</a>
         </div>
     </div>
 </main>
@@ -114,21 +110,23 @@
 </footer>
 
 <script>
-    function copyText() {
-        navigator.clipboard.writeText(document.getElementById('logContent').textContent);
-        alert("Text kopiert!");
-    }
+    // Holen der aktuellen URL
+    const currentUrl = window.location.pathname;
+    const requestedUrlElement = document.getElementById('requestedUrl');
+    const claimButton = document.getElementById('claimButton');
 
-    function copyLink() {
-        navigator.clipboard.writeText(window.location.href);
-        alert("Link kopiert!");
-    }
+    // Anzeigen der aufgerufenen URL
+    requestedUrlElement.textContent = window.location.origin + currentUrl;
 
-    function viewRaw() {
-        // Aktuelle URL abrufen und /raw/ einfügen
-        const currentUrl = window.location.href;
-        const rawUrl = currentUrl.replace('/{{CODE}}', '/raw/{{CODE}}');
-        window.open(rawUrl, '_blank');
+    // Setzen des Links für den Claim-Button
+    claimButton.href = `/?desired=${currentUrl.substring(1)}`;
+
+    // Optional: Scrollen zur Nachricht, wenn eine spezifische URL aufgerufen wurde
+    if(currentUrl !== '/') {
+        window.scrollTo({
+            top: document.querySelector('.special-message').offsetTop - 100,
+            behavior: 'smooth'
+        });
     }
 </script>
 </body>

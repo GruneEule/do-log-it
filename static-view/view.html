@@ -14,7 +14,7 @@
     <nav>
         <a href="/" class="logo">
             <img src="https://cdn.jsdelivr.net/gh/GruneEule/do-log-it@main/static/assets/img/dlg.png" alt="GrüneEule Logo" class="logo-img">
-            do-log-it
+            Do Log it
         </a>
         <ul class="nav-links">
             <li><a href="/">Home</a></li>
@@ -29,7 +29,7 @@
     <div class="log-container">
         <div class="logo-container">
             <img src="https://cdn.jsdelivr.net/gh/GruneEule/do-log-it@main/static/assets/img/dlg.png" alt="do-log-it Logo" class="form-logo">
-            <h1>do-log-it</h1>
+            <h1>Do Log it</h1>
         </div>
 
         <h2>Log Ansicht</h2>
@@ -40,6 +40,7 @@
         <div class="log-actions">
             <button onclick="copyText()">Text kopieren</button>
             <button onclick="copyLink()">Link kopieren</button>
+            <button onclick="viewRaw()">Raw</button>
         </div>
     </div>
 </main>
@@ -121,6 +122,13 @@
     function copyLink() {
         navigator.clipboard.writeText(window.location.href);
         alert("Link kopiert!");
+    }
+
+    function viewRaw() {
+        // Aktuelle URL abrufen und /raw/ einfügen
+        const currentUrl = window.location.href;
+        const rawUrl = currentUrl.replace('/{{CODE}}', '/raw/{{CODE}}');
+        window.open(rawUrl, '_blank');
     }
 </script>
 </body>
